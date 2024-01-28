@@ -1,0 +1,1 @@
+import{_ as o,e as s,f as c,p as a,n as _,g as t}from"./index-iFhITWZR.js";const d={},n=e=>(a("data-v-5813af87"),e=e(),_(),e),p={class:"about"},r=n(()=>t("h1",null,[t("a",{href:"https://github.com/ybxzf/vue3-ts-project"}," vue-project项目github地址")],-1)),f=[r];function h(e,i){return s(),c("div",p,f)}const l=o(d,[["render",h],["__scopeId","data-v-5813af87"]]);export{l as default};
