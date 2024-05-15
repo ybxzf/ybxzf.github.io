@@ -1,6 +1,7 @@
 # 我的github pages托管项目
 
 # 路径
+[sim-dashboard](https://ybxzf.github.io/sim-dashboard/ "sim-dashboard")  
 [wit](https://ybxzf.github.io/wit/ "wit")  
 [Vue3项目练习](https://ybxzf.github.io/vue-project/ "vue-project")  
 [自我介绍](https://ybxzf.github.io/myself/ "myself")  
