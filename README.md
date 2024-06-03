@@ -16,3 +16,4 @@
   7. [7.Node.js面试真题-71页.pdf](https://ybxzf.github.io/frontEndQuestions/大厂前端面试题库/7.Node.js面试真题-71页.pdf)
   8. [8.小程序面试真题-37页.pdf](https://ybxzf.github.io/frontEndQuestions/大厂前端面试题库/8.小程序面试真题-37页.pdf)
   9. [9.HTTP面试真题-62页.pdf](https://ybxzf.github.io/frontEndQuestions/大厂前端面试题库/9.HTTP面试真题-62页.pdf)
+  10. [10.HTTP面试真题-62页.pdf](https://ybxzf.github.io/frontEndQuestions/2024mianshi.pdf)
