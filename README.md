@@ -17,3 +17,5 @@
   8. [8.小程序面试真题-37页.pdf](https://ybxzf.github.io/frontEndQuestions/大厂前端面试题库/8.小程序面试真题-37页.pdf)
   9. [9.HTTP面试真题-62页.pdf](https://ybxzf.github.io/frontEndQuestions/大厂前端面试题库/9.HTTP面试真题-62页.pdf)
   10. [10.2024年前端最新场景题⾯试攻略.pdf](https://ybxzf.github.io/frontEndQuestions/2024web.pdf)
+  11. [自己记录：vue2和vue3](https://ybxzf.github.io/frontEndQuestions/selfRecording/vue2_vue3.md)
+  12. [自己记录：webpack和vite](https://ybxzf.github.io/frontEndQuestions/selfRecording/webpack_vite.md)
