@@ -1,0 +1,62 @@
+[
+    {
+        "label": "场景一：光伏给负载供电",
+        "value": "1",
+        "describe": "K1、K7断开，K3、K5、K8闭合，可实现光伏给负载供电、光伏发电剩余电量到储能、储能给负载供电的场景。",
+        "switchObj": {
+            "k1": false,
+            "k2": true,
+            "k3": true,
+            "k4": false,
+            "k5": true,
+            "k6": false,
+            "k7": false,
+            "k8": true
+        }
+    },
+    {
+        "label": "场景二：市电给储能充电且储能给负载供电",
+        "value": "2",
+        "describe": "K6、K7断开，K1、K3、K4、K5、K8闭合，可实现市电给储能电池充电，同时实现储能电池给负载供电的场景。",
+        "switchObj": {
+            "k1": true,
+            "k2": true,
+            "k3": true,
+            "k4": true,
+            "k5": true,
+            "k6": false,
+            "k7": false,
+            "k8": true
+        }
+    },
+    {
+        "label": "场景三：市电给负载供电",
+        "value": "3",
+        "describe": "K3、K4、K5、K7断开，K1、K6、K8闭合，可实现市电给负载供电的场景。",
+        "switchObj": {
+            "k1": true,
+            "k2": true,
+            "k3": false,
+            "k4": false,
+            "k5": false,
+            "k6": true,
+            "k7": false,
+            "k8": true
+        }
+    },
+    {
+        "label": "场景四：市电给充电桩供电",
+        "value": "4",
+        "describe": "K8断开，K7闭合，可实现市电给充电桩供电的场景 (充电桩供电常用场景，不涉及光伏系统)。",
+        "switchObj": {
+            "k1": false,
+            "k2": true,
+            "k3": false,
+            "k4": false,
+            "k5": false,
+            "k6": false,
+            "k7": true,
+            "k8": false
+        }
+    }
+]
