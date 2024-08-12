@@ -5,15 +5,15 @@ Webpack是一个现代前端开发中常用的静态模块打包工具，它可�
 ### 2. plugin和loader有什么区别？
 **loader** 是用来处理具体的模块，而 **plugin** 是用来扩展 webpack 功能的。loader 是在编译过程中运行的，而 plugin 是在编译完成后运行的。
 
-**Loader**：Webpack将一切文件视为模块，但是默认只能解析 JavaScript 文件，如果想将其他类型的文件（如CSS、图片）也视作模块并进行打包，就会用到loader。Loader可以将不同格式的文件转换为模块，这样这些文件就可以被添加到依赖图中，最终一起打包到指定的文件中。常见的Loader有babel-loader用于将ES6/ES7转换为ES5、css-loader用于处理CSS文件等。
+**Loader加载器**：Webpack将一切文件视为模块，但是默认只能解析 JavaScript 文件，如果想将其他类型的文件（如CSS、图片）也视作模块并进行打包，就会用到loader。Loader可以将不同格式的文件转换为模块，这样这些文件就可以被添加到依赖图中，最终一起打包到指定的文件中。常见的Loader有babel-loader用于将ES6/ES7转换为ES5、css-loader用于处理CSS文件等。
 
-**Plugin**：Plugin用于扩展Webpack的功能，它通过在整个构建过程中的特定时机挂载钩子实现，以实现对构建过程的干预和定制。Plugin可以用于执行更广泛的任务，比如打包优化、资源管理、环境变量注入等。常见的Plugin有HtmlWebpackPlugin用于生成HTML文件、MiniCssExtractPlugin用于提取CSS文件等
+**Plugin插件**：Plugin用于扩展Webpack的功能，它通过在整个构建过程中的特定时机挂载钩子实现，以实现对构建过程的干预和定制。Plugin可以用于执行更广泛的任务，比如打包优化、资源管理、环境变量注入等。常见的Plugin有HtmlWebpackPlugin用于生成HTML文件、MiniCssExtractPlugin用于提取CSS文件等
 ### 3. Vite为什么比webpack要快？
 Vite 相对于传统的 Webpack 构建工具，主要有以下几个方面的优势，使它在开发体验上更快一些：
 
 1. **快速的冷启动**：Vite 使用了一种称为「按需编译」的模式，它仅在启动时编译正在编辑的文件，而不是像 Webpack 那样要编译整个项目。这意味着在启动开发服务器时，Vite 的冷启动速度更快，因为它只需编译少量的文件。
 
-2. **通过 ES 模块进行原生导入**：Vite 基于原生 ES 模块的导入方式，而不是像 Webpack 那样需要将所有模块打包成一个或多个捆绑包。这使得 Vite 不需要进行大量的代码分析和重新构建工作，并且可以更快地处理模块的导入过程。
+2. **通过 ES 模块进行原生导入**：Vite 基于原生 ES 模块的导入方式，而不是像 Webpack 那样需要将所有模块打包成一个或多个捆绑包chunks。这使得 Vite 不需要进行大量的代码分析和重新构建工作，并且可以更快地处理模块的导入过程。
 
 3. **高效的 HMR（热模块替换）机制**：Vite 在开发过程中使用了高效的 HMR 机制。它通过直接将更新的模块推送到浏览器，而无需重新刷新整个页面来实时更新应用程序。这样可以节省重新加载的时间，提高开发体验。
 
