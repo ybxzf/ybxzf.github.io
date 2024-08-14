@@ -1,16 +1,23 @@
 
 # Vue2+3篇
 ### 1. \$route和\$router的区别
-**\$router** 是VueRouter的实例，在script标签中想要导航到不同的URL,使用  $router.push方法
+**\$router** 是VueRouter的实例，在script标签中想要导航到不同的URL,使用  $router.push方法 
+
 **\$route** 为router跳转对象，里面可以获取当前路由的name,path,query,parmas等。
 ### 2. 一个.vue文件由几部分组成，分别什么含义
-1.<**template** > 所需要渲染的区域
-2.<**script** > 存放引入的资源与业务实现的数据与操作
-3.<**style** > 存放界面css的样式
+1.<**template** > 所需要渲染的区域 
+
+2.<**script** > 存放引入的资源与业务实现的数据与操作 
+
+3.<**style** > 存放界面css的样式 
+
 ### 3. scoped作用与原理
-默认情况下，如果子组件和父组件css选择器权重相同，优先加载父组件css样式
-**作用**：组件css作用域，避免子组件内部的css样式被父组件覆盖
-**原理**：给元素添加一个自定义属性 v-data-xxxxx， 通过属性选择题来提高css权重值
+默认情况下，如果子组件和父组件css选择器权重相同，优先加载父组件css样式 
+
+**作用**：组件css作用域，避免子组件内部的css样式被父组件覆盖 
+
+**原理**：给元素添加一个自定义属性 v-data-xxxxx， 通过属性选择题来提高css权重值 
+
 ### 4. 组件通信有哪些方式，详见14题
 1. 通过 props/emit 传递
 2. 通过 \$emit 触发自定义事件
@@ -27,16 +34,21 @@
 
 我们对象是引用类型数据，处理的是内存当中的地址。当我们引用data多个组件会对data的地址值进行更改。当我们data是函数的话，则会每次引用的时候都会返回一个新的的地址确保我们的数据不会被更改。
 ### 6. vue生命周期分为几个阶段，几个钩子函数，分别写出来
- **初始化阶段** :  beforeCreate、 created
- **挂载阶段** : beforeMount、mounted
- **更新阶段** : beforeUpdate、updated
- **销毁阶段** :  beforeDestroy、destroyed
+ **初始化阶段** :  beforeCreate、 created 
+
+ **挂载阶段** : beforeMount、mounted 
+
+ **更新阶段** : beforeUpdate、updated 
+
+ **销毁阶段** :  beforeDestroy、destroyed 
+
 ### 7. \$nextTick的实现
 **nextTick** 是Vue提供的一个全局API,是在下次DOM更新循环结束之后执行延迟回调，在修改数据之后使用$nextTick，则可以在回调中获取更新后的DOM。
 
 Vue在更新DOM时是**异步执行**的。只要侦听到数据变化，Vue将开启1个队列，并缓冲在同一事件循环中发生的所有数据变更。如果同一个watcher被多次触发，只会被推入到队列中-次。这种在缓冲时去除重复数据对于避免不必要的计算和DOM操作是非常重要的。nextTick方法会在队列中加入一个回调函数，确保该函数在前面的dom操作完成后才调用
 
 比如，我在干什么的时候就会使用nextTick，传一个回调函数进去，在里面执行dom操作即可。简单了解nextTick的实现，它会在callbacks里面加入我们传入的函数，然后用timerFunc异步方式调用它们，首选的异步方式会是Promise。这让我明白了为什么可以在nextTick中看到dom操作结果。
+
 ***实现原理*** ：在下次 DOM 更新循环结束之后执行延迟回调，在修改数据之后立即使用 nextTick 来获取更新后的 DOM。 nextTick主要使用了宏任务和微任务。 根据执行环境分别尝试采用Promise、MutationObserver、setImmediate，如果以上都不行则采用setTimeout定义了一个异步方法，多次调用nextTick会将方法存入队列中，通过这个异步方法清空当前队列。
 ### 8. 实现组件缓存，其作用
 使用<**keep-alive**>标签
@@ -51,13 +63,21 @@ Vue在更新DOM时是**异步执行**的。只要侦听到数据变化，Vue将�
 
 ### 9. MVVM与MVC的区别是什么
 **MVC** 模式将程序分为三个部分：模型（Model）、视图（View）、控制器（Controller）。
+
 **Model 模型层**： 业务数据的处理和存储，数据更新后更新；
+
 **View 视图层**： 人机交互接口，一般为展示给用户的界面；
+
 **Controller 控制器层** ： 负责连接 Model 层和 View 层，接受并处理 View 层触发的事件，并在 Model 层的数据状态变动时更新 View 层；
+
 MVC 模式的目的是通过引入 Controller 层来将 Model 层和 View 层分离，分层的引入是原来大锅烩方式的改进，使得系统在可维护性和可读性上有了进步。
 MVC 模式提出已经有四十余年，MVC 模式在各个书、各个教程、WIKI 的解释有各种版本，甚至 MVC 模式在不同系统中的具体表现也不同，这里只介绍典型 MVC 模式的思路。
-**MVVM** 模式将程序分为三个部分：模型（Model）、视图（View）、视图模型（View-Model）。Model 层和 View 层被隔离开，彻底解耦。它通过引入一个视图模型（ViewModel)来实现分离，增加了双向绑定机制。
+**MVVM** 模式将程序分为三个部分：模型（Model）、视图（View）、视图模型（View-Model）。
+
+Model 层和 View 层被隔离开，彻底解耦。它通过引入一个视图模型（ViewModel)来实现分离，增加了双向绑定机制。
+
 MVVM 模式的特征是 ViewModel 层和 View 层采用双向绑定的形式（Binding），View 层的变动，将自动反映在 ViewModel 层，反之亦然。
+
 ### 10. vue2双向数据绑定（响应式）基本原理，vue3见21题
 通过Object.defineProperty()来劫持各个属性的setter，getter，通过数据劫持结合发布订阅模式的方式来实现的，在数据变动时发布消息给订阅者，触发相应的监听回调来渲染视图。也就是说数据和视图同步，数据发生变化，视图跟着变化，视图变化，数据也随之发生改变。
 ### 11. Vue常用修饰符有哪些
@@ -116,7 +136,9 @@ MVVM 模式的特征是 ViewModel 层和 View 层采用双向绑定的形式（B
 
 ### 15. vue中解决跨域
 **同源策略**：协议，主机名，端口号，端口都相同，是浏览器的一个重要的安全策略。三者有任何一个不同，都被浏览器当作是不同源。这时候就会产生跨域。
+
 **CORS解决跨域**：CORS方法工作原理：服务器在返回响应报文的时候，在响应头中设置一个允许的header，也就是加上以下这段代码：`res.setHeader('Access-Control-Allow-Origin', '*')`
+
 ### 16. 什么是虚拟 DOM
 **虚拟DOM** 给我们带来了跨平台的能力。实际上它是一层对真实BOM的抽象，以js对象(VNode节点)作为基础的树，用对象的属性来描述节点，相当于在 js 和真实 dom 中间加来一个缓存，利用 dom diff 算法避免没有必要的 dom 操作，从而提高性能。最后通过一系列操作使这棵树映射到真实环境上。
 
@@ -140,9 +162,13 @@ Diff 算法是一种对比算法。对比两者是 旧虚拟 DOM 和新虚拟 DO
 在封装组件时,在组件内部不确定该位置是以何种形式的元素展示时,我们可以通过 slot 占据这个位置,该位置的元素需要其他组件以内容形式传递过来.
 ### 19. vue.use
 **【是什么】**：Vue.use 是用来注册 Vue 插件的一个函数。
+
 **【怎么用】**：可以传递是一个对象，必须提供 install 方法。也可以传递一个函数，它会被作为 install 方法，install 方法调用时，会将 Vue 作为参数传入。
+
 **【注意点】**：该方法需要在 new Vue() 之前被调用；当 install 方法被同一个插件多次调用，插件将只会被安装一次。
+
 **【场景】**：通常用来为 Vue 添加全局功能，例如添加全局方法或 property、添加全局指令、注入组件选项、添加实例方法等。
+
 ### 19. vue路由
 **路由**：确保我们在vue中实现页面跳转到我们所想的页面
 **路由模式**：
@@ -156,7 +182,9 @@ Diff 算法是一种对比算法。对比两者是 旧虚拟 DOM 和新虚拟 DO
 **路由守卫** ：Vue Router提供的一种机制，它可以让你在路由跳转之前或之后执行一些自定义逻辑，例如：鉴权、重定向等。守卫分为全局守卫、路由独享守卫和组件内守卫。
 1. **全局守卫：** 作用于所有路由， 前置路由守卫（beforeEach）、 后置路由守卫（afterEach）
 > **router.beforeEach()** ：前置路由守卫，进入之前触发
+> 
 > **router.afterEach()** ：后置路由守卫，进入之后触发
+> 
 > 每个守卫方法接收三个参数：
 > - **to**: Route: 即将要进入的目标路由对象（to是一个对象，是将要进入的路由对象，可以用to.path调用路由对象中的属性）
 > - **from**: Route: 当前导航正要离开的路由
@@ -170,7 +198,8 @@ Diff 算法是一种对比算法。对比两者是 旧虚拟 DOM 和新虚拟 DO
 2. 体积更小了，删除了一些没必要或不常用到的 API，例如 filter、EventBus 等；按需导入，能配合 Webpack 支持 Tree Shaking。
 3. 对 TS 支持更好，因为它本身源码就是用 TS 重写的。
 4. Composition API（组合 API），相比较 Vue2 的 options api，对于开发大型项目更利于代码的复用和维护。
-5. 新特性，例如 Fragment、Teleport、Suspense 等。
+5. Vue3支持了多个根节点的组件，可以更方便地进行组件的复用和组合。
+6. 新特性，例如 Fragment、Teleport、Suspense 等。
 ### 21. vue3双向数据绑定（响应式）基本原理，vue2见10题
 Vue3使用**Proxy** 代替了**Object.defineProperty** ，Proxy可以监听到对象的所有属性，包括新增和删除操作，结合数据劫持+发布订阅模式实现。
 Vue3使用了WeakMap来存储依赖关系，避免了Vue2中Watcher的内存泄漏问题。
@@ -185,7 +214,7 @@ Vue3支持了多个根节点的组件，可以更方便地进行组件的复用�
 2. 如果参数是对象类型时，其实底层的本质还是reactive,系统会自动根据我们给ref传入的值转换成：reactive。
 3. 在template中访问，系统会自动添加.value;在js中需要手动.value。
 4. ref响应式原理是依赖于Object.defineProperty()的get()和set()的。
-5. 
+
 ### 23. 关于组合式API（composition API）
 1. 为什么选择组合式API
 > 由于vue2有局限性：
