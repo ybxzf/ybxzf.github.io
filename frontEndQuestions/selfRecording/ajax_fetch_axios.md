@@ -2,7 +2,7 @@
 
 ## 一、Ajax相关
 ### 1. Ajax概念
-**Ajax 全称** ：async javaScript and xml。
+**Ajax 全称** ：async javaScript and xml（异步JavaScript和XML）。
 
 **xml** ：是一种可以扩展的文本标记语言，可以扩展自定义的语义标签。很早以前 xml 常用于从服务端返回数据结构，现在基本都是使用 json 格式返回数据。
 
