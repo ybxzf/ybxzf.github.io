@@ -288,5 +288,6 @@ fetch 使用的是 **promise** 方便使用异步，**解决了**回调地狱问
 2. 在 URL 后面加上一个**随机数**：`"fresh=" + Math.random()`。 或在后面加上时间戳：`"nowtTime=" + new Date().getTime()`。
 3. 如果是使用 **jQuery** ，直接这样就可以了 `$.ajaxSetup({cache:false})`。这样页面的所有 ajax 都会执行这条语句就是不需要保存缓存记录。
 
+### 待续。。。
 
 
