@@ -293,6 +293,7 @@ Vue3中新增了两个生命周期钩子函数：
  **beforeDestroy和destroyed** 合并为 **onUnmounted** 函数，使得组件的卸载更加安全和可靠。
 
 **执行最终顺序：**
+
 Vue **3** 生命周期：setup
 
 Vue **2** 生命周期：beforeCreate
