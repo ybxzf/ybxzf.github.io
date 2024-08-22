@@ -294,20 +294,35 @@ Vue3中新增了两个生命周期钩子函数：
 
 **执行最终顺序：**
 Vue **3** 生命周期：setup
+
 Vue **2** 生命周期：beforeCreate
+
 Vue **2** 生命周期：created
+
 Vue **3** 生命周期：onBeforeMount
+
 Vue **2** 生命周期：beForeMount
+
 Vue **3** 生命周期：onMounted
+
 Vue **2** 生命周期：mounted
+
 Vue **3** 生命周期：onBeforeUpdate
+
 Vue **2** 生命周期：beforeUpdate
+
 Vue **3** 生命周期：onUpdated
+
 Vue **2** 生命周期：updated
+
 Vue **3** 生命周期：onBeforeUnmount
+
 Vue **2** 生命周期：beforeUnmount
+
 Vue **3** 生命周期：onUnmounted
+
 Vue **2** 生命周期：unmounted
+
 ### 29. 什么是 SPA
 **单页面应用（single page web application，SPA）** ，就是只有一张Web页面的应用，是加载单个 HTML 页面并在用户与应用程序交互时动态更新该页面的Web应用程序。
 **SPA的优点：**
