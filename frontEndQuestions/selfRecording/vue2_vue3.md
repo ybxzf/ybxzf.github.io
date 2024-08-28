@@ -231,7 +231,16 @@ Diff 算法是一种对比算法。对比两者是 旧虚拟 DOM 和新虚拟 DO
 5. Vue3支持了多个根节点的组件，可以更方便地进行组件的复用和组合。
 6. 新特性，例如 Fragment、Teleport、Suspense 等。
 ### 21. vue3双向数据绑定（响应式）基本原理，vue2见10题
-Vue3使用**Proxy** 代替了**Object.defineProperty** ，Proxy可以监听到对象的所有属性，包括新增和删除操作，结合数据劫持+发布订阅模式实现。
+
+**Vue2响应式**的缺陷：
+1. 无法响应新增属性
+2. 无法响应数组索引和length的变化
+3. 需要使用$watch来监听嵌套属性
+4. 不支持 Map、Set、WeakMap 和 WeakSet
+5. 性能问题
+6. 深度监听的开销，是递归的，可能会导致性能问题
+
+**Vue3**使用ES6的**Proxy** 代替了**Object.defineProperty** ，Proxy可以监听到对象的所有属性，包括新增和删除操作，结合数据劫持+发布订阅模式实现。
 Vue3使用了WeakMap来存储依赖关系，避免了Vue2中Watcher的内存泄漏问题。
 Vue3支持了多个根节点的组件，可以更方便地进行组件的复用和组合。
 ### 22. ref与reactive
