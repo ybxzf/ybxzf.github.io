@@ -61,6 +61,9 @@ Vue在更新DOM时是**异步执行**的。只要侦听到数据变化，Vue将�
 
 **原理**：Vue.js内部将DOM节点抽象成了一个个的VNode节点，keep-alive组件的缓存也是基于VNode节点的而不是直接存储DOM结构。它将满足条件（pruneCache与pruneCache）的组件在cache对象中缓存起来，在需要重新渲染的时候再将vnode节点从cache对象中取出并渲染。
 
+#### 8.1 如果keepalive想让组件actived只触发一次，应该怎么做？
+在 Vue.js 中，使用 keep-alive 组件时，activated 钩子会在每次组件激活时触发。如果你想让 activated 钩子只执行一次，你可以通过一个标志位（例如 this.hasActivated）来控制，只在首次激活时执行代码。
+
 ### 9. MVVM与MVC的区别是什么
 **MVC** 模式将程序分为三个部分：模型（Model）、视图（View）、控制器（Controller）。
 
@@ -374,7 +377,25 @@ Vue **2** 生命周期：unmounted
 2. **注意** ：在子组件直接用 v-model 绑定父组件传过来的 props 这样是不规范的写法，开发环境会报警告。
 3. 如果实在要改变父组件的 props 值可以再data里面定义一个变量，并用 prop 的值初始化它，之后用$emit 通知父组件去修改。
    
-### 
+### 31. 讲一下render函数
+
+通常我们都会把我们的页面结构逻辑都写在 **template** 中，然后再通过Vue将我们的代码转换成 **虚拟DOM** ，相比于真实DOM，虚拟DOM是 **通过JS代码** 处理的，所以消耗的性能相对较小，当然大部分情况下使用 template 创建我们的HTML是可以的，但是在有些场景下，我们真的需要通Javascript的完全编程的能力来完成时，就可以用到render函数，比之 template 更接近编译器。
+
+ **render函数（渲染函数）** 的作用就是： **返回一个虚拟dom，将该虚拟dom渲染成真实的dom** 。
+ 他是一个函数，返回的参数是虚拟节点vnode 。
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 **待续。。。**
 
