@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>PPTX 在线预览 - xianlin.pptx</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 24px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 500;
+        }
+        .header p {
+            margin: 8px 0 0;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        .preview-area {
+            padding: 20px;
+            background: #e9ecef;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .info-card {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            width: 100%;
+        }
+        .info-card h3 {
+            margin: 0 0 8px 0;
+            color: #856404;
+        }
+        .info-card p {
+            margin: 0;
+            color: #856404;
+            font-size: 0.9rem;
+        }
+        .info-card code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .iframe-wrapper {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            height: 600px;
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .download-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .footer {
+            padding: 16px 24px;
+            background: #f8f9fa;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+        }
+        @media (max-width: 768px) {
+            .iframe-wrapper {
+                height: 400px;
+            }
+            .header h1 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📄 在线预览 PPTX 文件</h1>
+        <p>文件名：<strong>xianlin.pptx</strong> (当前目录下)</p>
+    </div>
+    <div class="preview-area">
+        <div class="info-card">
+            <h3>⚠️ 使用说明</h3>
+            <p>微软 Office Online 预览需要文件可通过 <strong>HTTP/HTTPS 公网地址</strong> 访问。<br>
+            如果你的文件在本地，请使用 <code>npx http-server</code> 或 <code>python -m http.server 8080</code> 启动本地服务器，<br>
+            然后通过 <code>http://localhost:8080/</code> 访问本页面，即可正常预览。</p>
+            <p style="margin-top: 8px;">💡 提示：如果预览区域一直空白或显示错误，请检查文件是否在当前目录，并确保使用 HTTP 服务访问，而不是直接双击打开 HTML 文件（file:// 协议无效）。</p>
+        </div>
+        <div class="iframe-wrapper">
+            <!-- 微软 Office 在线预览服务 -->
+            <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=<?php echo urlencode($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/xianlin.pptx'); ?>"
+                    frameborder="0"
+                    allowfullscreen>
+            </iframe>
+        </div>
+        <div class="download-link">
+            <a href="xianlin.pptx" class="btn" download>📥 下载文件 (xianlin.pptx)</a>
+        </div>
+        <div style="margin-top: 12px; font-size: 0.85rem; color: #6c757d;">
+            * 如果无法预览，请下载后使用本地 Office 软件打开。
+        </div>
+    </div>
+    <div class="footer">
+        Powered by Microsoft Office Online | 文件路径：当前目录/xianlin.pptx
+    </div>
+</div>
+
+<script>
+    // 动态修正 iframe 的 src，自动使用当前页面的协议和域名（支持 HTTP/HTTPS）
+    (function() {
+        var iframe = document.querySelector('iframe');
+        if (iframe) {
+            var currentUrl = window.location.href;
+            // 获取当前页面的基础 URL（去除文件名部分）
+            var baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+            var pptxUrl = baseUrl + 'xianlin.pptx';
+            // 对 URL 进行编码
+            var encodedUrl = encodeURIComponent(pptxUrl);
+            var previewUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodedUrl;
+            iframe.src = previewUrl;
+        }
+    })();
+</script>
+</body>
+</html>
