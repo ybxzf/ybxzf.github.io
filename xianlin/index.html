@@ -1,12 +1,286 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>预览PPT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>PDF预览 - 移动优化版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #2c2e30;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .toolbar {
+            background: #1e1f22;
+            color: white;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid #3a3c40;
+        }
+        .title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+        button {
+            background: #3e4145;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+            touch-action: manipulation;
+        }
+        button:active {
+            background: #5a5e62;
+        }
+        .pdf-container {
+            flex: 1;
+            overflow: auto;
+            background: #1e1f22;
+            position: relative;
+        }
+        canvas {
+            margin: 16px auto;
+            display: block;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            background: white;
+            max-width: 100%;
+            height: auto;
+        }
+        .page-container {
+            text-align: center;
+        }
+        .loading, .error-msg {
+            text-align: center;
+            padding: 30px 20px;
+            color: #ddd;
+            font-size: 1rem;
+        }
+        .error-msg a {
+            color: #6ea8fe;
+            text-decoration: none;
+        }
+        .download-link {
+            display: inline-block;
+            margin-top: 16px;
+            background: #0a5e8c;
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            .toolbar { padding: 8px 10px; }
+            button { padding: 5px 10px; font-size: 0.75rem; }
+            .title { font-size: 0.8rem; }
+        }
+    </style>
+    <!-- 使用稳定版 PDF.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        // 设置 worker 源（必须）
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    </script>
 </head>
 <body>
-    <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=file:///./xianlin.pptx" 
-            width="100%" height="800px" frameborder="0">
-    </iframe>
+<div class="toolbar">
+    <div class="title">📄 xianlin.pdf</div>
+    <div class="controls">
+        <button id="prevPage" disabled>◀</button>
+        <span id="pageInfo" style="font-size:0.75rem; color:#ccc;">0/0</span>
+        <button id="nextPage" disabled>▶</button>
+        <button id="refreshBtn">⟳</button>
+    </div>
+</div>
+<div class="pdf-container" id="pdfContainer">
+    <div class="loading" id="loadingMsg">
+        ⏳ 正在加载 PDF，请稍候...<br>
+        <small style="font-size:0.8rem;">若长时间无响应，请点击下方按钮直接下载</small>
+        <div><a href="#" id="fallbackDownload" style="display:inline-block; margin-top:12px; background:#0a5e8c; padding:8px 16px; border-radius:30px; color:white; text-decoration:none;">📥 直接下载 PDF</a></div>
+    </div>
+    <div id="canvasContainer" style="display: none;"></div>
+</div>
+
+<script>
+    (function() {
+        // PDF 文件路径（请确保此文件与当前 HTML 在同一目录下）
+        const PDF_URL = 'xianlin.pdf';
+        
+        let pdfDoc = null;
+        let currentPage = 1;
+        let totalPages = 0;
+        let renderTask = null;
+        let scale = 1.2; // 手机屏幕适配，可根据设备宽度自动调整
+        
+        const container = document.getElementById('canvasContainer');
+        const loadingDiv = document.getElementById('loadingMsg');
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const pageInfoSpan = document.getElementById('pageInfo');
+        const fallbackLink = document.getElementById('fallbackDownload');
+        
+        // 设置下载链接为同一个 PDF 文件
+        fallbackLink.href = PDF_URL;
+        fallbackLink.setAttribute('download', 'xianlin.pdf');
+        
+        // 自动计算合适的缩放比例（手机屏幕宽度）
+        function computeScale() {
+            const containerWidth = document.getElementById('pdfContainer').clientWidth - 32;
+            // 默认使用 1.2 倍，再根据容器宽度限制最大值
+            let baseScale = 1.2;
+            if (containerWidth < 500) baseScale = 1.0;
+            return Math.min(baseScale, containerWidth / 600);
+        }
+        
+        // 渲染当前页
+        function renderPage(num) {
+            if (!pdfDoc) return;
+            if (renderTask) {
+                renderTask.cancel();
+            }
+            pdfDoc.getPage(num).then(page => {
+                const viewport = page.getViewport({ scale: computeScale() });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                canvas.style.maxWidth = '100%';
+                canvas.style.height = 'auto';
+                
+                container.innerHTML = '';
+                container.appendChild(canvas);
+                
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                renderTask = page.render(renderContext);
+                renderTask.promise.then(() => {
+                    renderTask = null;
+                }).catch(err => {
+                    if (err.name !== 'RenderingCancelled') {
+                        console.error('渲染错误:', err);
+                        showError('渲染失败，请尝试刷新或下载查看。');
+                    }
+                });
+                pageInfoSpan.textContent = `${num} / ${totalPages}`;
+                updateButtons();
+            }).catch(err => {
+                console.error('获取页面失败:', err);
+                showError('页面提取失败，PDF 可能已损坏。');
+            });
+        }
+        
+        function updateButtons() {
+            prevBtn.disabled = (currentPage <= 1);
+            nextBtn.disabled = (currentPage >= totalPages);
+        }
+        
+        function prevPage() {
+            if (pdfDoc && currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        }
+        
+        function nextPage() {
+            if (pdfDoc && currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        }
+        
+        function showError(msg) {
+            loadingDiv.innerHTML = `
+                <div style="background:#3a2a2a; padding:20px; border-radius:8px;">
+                    ❌ ${msg}<br>
+                    <a href="${PDF_URL}" download="xianlin.pdf" style="display:inline-block; margin-top:16px; background:#0a5e8c; padding:8px 16px; border-radius:30px; color:white; text-decoration:none;">📥 点击下载 PDF</a>
+                    <br><br>
+                    <small>或在浏览器中打开 <a href="${PDF_URL}" target="_blank" style="color:#6ea8fe;">此链接</a></small>
+                </div>
+            `;
+            loadingDiv.style.display = 'block';
+            container.style.display = 'none';
+        }
+        
+        function loadPdf() {
+            loadingDiv.style.display = 'block';
+            container.style.display = 'none';
+            loadingDiv.innerHTML = '⏳ 正在加载 PDF，请稍候...<br><small>如果长时间无响应，请点击下方下载按钮</small>';
+            // 重置状态
+            if (pdfDoc) {
+                pdfDoc.destroy();
+                pdfDoc = null;
+            }
+            currentPage = 1;
+            totalPages = 0;
+            
+            pdfjsLib.getDocument(PDF_URL).promise.then(doc => {
+                pdfDoc = doc;
+                totalPages = doc.numPages;
+                currentPage = 1;
+                loadingDiv.style.display = 'none';
+                container.style.display = 'block';
+                renderPage(currentPage);
+            }).catch(err => {
+                console.error('PDF 加载失败:', err);
+                let errorMsg = '无法加载 PDF 文件。';
+                if (err.name === 'InvalidPDFException') {
+                    errorMsg = '文件不是有效的 PDF 格式。';
+                } else if (err.message && err.message.includes('NetworkError')) {
+                    errorMsg = '网络错误，请检查文件路径或网络连接。';
+                }
+                showError(errorMsg);
+            });
+        }
+        
+        // 刷新
+        function refresh() {
+            loadPdf();
+        }
+        
+        // 事件绑定
+        prevBtn.addEventListener('click', prevPage);
+        nextBtn.addEventListener('click', nextPage);
+        refreshBtn.addEventListener('click', refresh);
+        
+        // 监听窗口大小变化，重新渲染当前页（保持清晰度）
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (pdfDoc && container.style.display !== 'none') {
+                    renderPage(currentPage);
+                }
+            }, 300);
+        });
+        
+        // 开始加载
+        loadPdf();
+    })();
+</script>
 </body>
 </html>
